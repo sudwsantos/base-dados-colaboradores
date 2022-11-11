@@ -1,0 +1,36 @@
+ul {
+    padding: 0;
+    border: 1px solid rgb(30, 27, 27);
+}
+
+ul > * {
+    border: 1px solid #1c1616;
+}
+
+li {
+    list-style: none;
+    padding: 1rem;
+    background-color: white;
+}
+
+label {
+    font-size: 25px;
+}
+
+input {
+    width: 200px;
+    height: 30px;
+    border-radius: 15px;
+    margin: 10px;
+}
+
+.btnAdd {
+    width: 100px;
+    height: 30px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+
+}

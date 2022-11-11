@@ -1,37 +1,47 @@
-import {useState} from 'react';
+import { useState, useRef } from 'react';
 import { BaseColaboradores } from "../BaseColaboradores";
+import "../estilos/stylelist.css";
 
 const Colaboradores = () => {
 
-  const [nombre, setNombre] = useState('')
-  const [listaColaboradores, setListaColaboradores] = useState(BaseColaboradores)
-  const [correo, setCorreo] = useState('')
+  const [listaColaboradores, setListaColaboradores] = useState([...BaseColaboradores])
+  const [busqueda, setBusqueda] = useState("")
+  const nombreRefe = useRef()
+  const correoRefe = useRef()
   
-
-  const newNombre = (e) => {
-    setNombre(e.target.value)
-  }
-
-  const newCorreo = (e) => {
-    setCorreo(e.target.value)
-  }
-
   const enterInput = (e) => {
     e.preventDefault()
-    setListaColaboradores([...listaColaboradores, {id:Date.now(), nombre:nombre, correo:correo} ])
-  
+    setListaColaboradores([...listaColaboradores, {id:Date.now() % 100, nombre:nombreRefe.current.value, correo:correoRefe.current.value}, ])
+    nombreRefe.current.value = ""
+    correoRefe.current.value = ""
   }
-  return (
-    <div>
 
-      <input type="text" placeholder='Ingrese nombre:' onChange={newNombre}/>
-      <p>{nombre}</p>
-      <input type="text" placeholder='Ingrese correo:' onChange={newCorreo}/>
-      <p>{correo}</p>
-      <button onClick={enterInput}> Agregar colaborador </button>
+  const resultados = busqueda !== "" ? listaColaboradores.filter((colaborador) => colaborador.nombre.toLowerCase().includes(busqueda.toLowerCase()) || colaborador.correo.toLowerCase().includes(busqueda.toLowerCase())) : listaColaboradores
+
+  return (
+    <div className='container'>
+      <h1>Lista de Colaboradores</h1>
+      <label> Buscar </label>
+      <input type="text" onChange={(e) => setBusqueda(e.target.value)} />
+
+      <form onSubmit={enterInput}>
+        <label>Usuario</label>
+        <input type="text" ref={nombreRefe} required />
+            
+        <label>Correo</label>
+        <input type="email" ref={correoRefe} required />
+      
+        <button className='btnAdd' type="submit"> Agregar </button>
+      </form>
+
       <ul>
-        {listaColaboradores.map(colaborador => <li key={colaborador.id}>
-          {colaborador.nombre} {colaborador.correo}</li>)}
+        {
+          resultados.map((resultado) => {
+            return (
+              <li key={resultado.id}>Nombre: {resultado.nombre} - Correo: {resultado.correo} - ID: {resultado.id}</li>
+            )
+          })
+        }
       </ul>
     </div>
   )
